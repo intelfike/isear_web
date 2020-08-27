@@ -1,0 +1,17 @@
+SetEnvIf Request_URI ".*" Ngx_Cache_NoCacheMode=off
+SetEnvIf Request_URI ".*" Ngx_Cache_StaticMode
+
+RewriteEngine On
+RewriteRule ^/v_.*$ /404.html [L]
+RewriteRule ^/_top/index$ /index.html [L]
+RewriteRule ^/_(\w+)/index$ /$1.html [L]
+RewriteRule ^/_(\w+)/(\w+)$ /$1_$2.html [L]
+RewriteRule ^/_(\w+)/?$ /$1.html [L]
+RewriteRule ^/$ /index.html [L]
+
+# https -> http
+RewriteCond %{HTTP} off
+RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# .htmlでもphp実行
+AddHandler fcgid-script .html
